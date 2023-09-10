@@ -1,16 +1,26 @@
 import './App.css'
-import Header from './components/header'
-import { Sidebar } from './components/sidebar-nav'
+import { ThemeProvider } from '@/components/theme-provider'
+import Main from '@/routes/main'
+import { BrowserRouter } from 'react-router-dom'
 
 function App() {
     return (
-        <>
-            <Header />
-            <div className='flex w-1/6'>
-                <Sidebar />
-            </div>
-        </>
+        <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+            <BrowserRouter>
+                <Main />
+            </BrowserRouter>
+        </ThemeProvider>
     )
 }
 
 export default App
+
+// function App() {
+//     return (
+//         <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+//             {children}
+//         </ThemeProvider>
+//     )
+// }
+
+// export default App

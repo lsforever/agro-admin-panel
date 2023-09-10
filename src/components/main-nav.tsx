@@ -13,26 +13,25 @@ export function MainNav({
             )}
             {...props}
         >
-            <span
-                //to='/examples/dashboard'
-                className='text-sm font-medium transition-colors hover:text-primary'
+            <Link
+                to='/'
+                className='text-sm font-medium text-muted-foreground transition-colors hover:text-primary'
             >
-                Overview
-            </span>
+                Dashboard
+            </Link>
 
-            <span
-                //to='/examples/dashboard'
-                className='text-sm font-medium transition-colors hover:text-primary'
+            <Link
+                to='/crops'
+                className='text-sm font-medium text-muted-foreground transition-colors hover:text-primary'
             >
-                Overview
-            </span>
-
-            <span
-                //to='/examples/dashboard'
-                className='text-sm font-medium transition-colors hover:text-primary'
+                Crops
+            </Link>
+            <Link
+                to='/data'
+                className='text-sm font-medium text-muted-foreground transition-colors hover:text-primary'
             >
-                Overview
-            </span>
+                Data
+            </Link>
 
             {/* <Link
                 to='/examples/dashboard'
