@@ -19,7 +19,7 @@ function SidebarNavItem({ className, path, text, Icon }: NavItemProps) {
                     variant={isActive ? 'secondary' : 'ghost'}
                     className='w-full justify-start'
                 >
-                    <Icon className='mr-2 h-4 w-4' />
+                    <Icon className='stroke-primary mr-2 h-4 w-4' />
                     {text}
                 </Button>
             )}

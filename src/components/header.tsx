@@ -1,4 +1,4 @@
-import { MainNav } from '@/components/main-nav'
+//import { MainNav } from '@/components/main-nav'
 import { Search } from '@/components/search'
 //import TeamSwitcher from '@/app/examples/dashboard/components/team-switcher'
 import { UserNav } from '@/components/user-nav'
@@ -21,7 +21,7 @@ export default function Header() {
                 </div> */}
 
                 <div className='flex h-16 items-center px-4'>
-                    <h4 className='scroll-m-20 text-xl font-semibold tracking-tight'>
+                    <h4 className='scroll-m-20 text-xl font-bold tracking-tight ml-4'>
                         Agro Admin
                     </h4>
                     {/* <MainNav className='mx-6' /> */}

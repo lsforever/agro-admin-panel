@@ -30,6 +30,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useState } from 'react'
 
+import PaginationMenu from '@/components/custom/pagination'
 // import { Moon, Sun } from 'lucide-react'
 
 interface DataTableProps<TData, TValue> {
@@ -41,13 +42,13 @@ interface DataTableProps<TData, TValue> {
 //     table: Tablez<TData>
 // }
 
-// import {
-//     Select,
-//     SelectContent,
-//     SelectItem,
-//     SelectTrigger,
-//     SelectValue,
-// } from '@/components/ui/select'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 
 export function DataTable<TData, TValue>({
     columns,
@@ -83,6 +84,7 @@ export function DataTable<TData, TValue>({
         <div>
             <div className='flex items-center py-4'>
                 <Input
+                    id='filter-email'
                     placeholder='Filter emails...'
                     value={
                         (table
@@ -177,12 +179,12 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <div className='flex items-center justify-end space-x-2 py-4'>
+            <div className='flex items-center justify-end space-x-2 py-4 '>
                 <div className='flex-1 text-sm text-muted-foreground'>
                     {table.getFilteredSelectedRowModel().rows.length} of{' '}
                     {table.getFilteredRowModel().rows.length} row(s) selected.
                 </div>
-                <Button
+                {/* <Button
                     variant='outline'
                     size='sm'
                     onClick={() => table.previousPage()}
@@ -197,7 +199,46 @@ export function DataTable<TData, TValue>({
                     disabled={!table.getCanNextPage()}
                 >
                     Next
-                </Button>
+                </Button> */}
+
+                <div className='flex items-center space-x-2'>
+                    <p className='text-sm font-medium'>Rows per page</p>
+                    <Select
+                        value={`${table.getState().pagination.pageSize}`}
+                        onValueChange={(value) => {
+                            table.setPageSize(Number(value))
+                        }}
+                    >
+                        <SelectTrigger className='h-8 w-[70px]'>
+                            <SelectValue
+                                placeholder={
+                                    table.getState().pagination.pageSize
+                                }
+                            />
+                        </SelectTrigger>
+                        <SelectContent side='top'>
+                            {[10, 20, 30, 40, 50].map((pageSize) => (
+                                <SelectItem
+                                    key={pageSize}
+                                    value={`${pageSize}`}
+                                >
+                                    {pageSize}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+
+                <PaginationMenu
+                    onPageChange={(page) => {
+                        console.log(page)
+                    }}
+                    siblingCount={1}
+                    totalCount={1000}
+                    pageSize={5}
+                    currentPage={1}
+                    //className='text-primary'
+                />
             </div>
         </div>
     )
