@@ -1,7 +1,8 @@
 import Home from '@/pages/home'
-import Login from '@/pages/login/page'
-import DemoPage from '@/views/crops/page'
+import Login from '@/pages/login'
+import DemoPage from '@/views/crops'
 import { Routes, Route } from 'react-router-dom'
+import { RequireAuth } from 'react-auth-kit'
 
 const Main = () => {
     return (
@@ -11,6 +12,14 @@ const Main = () => {
             </Route>
             <Route path='/login' element={<Login />} />
             <Route path='/signup' element={<h1>Signup</h1>} />
+            <Route
+                path={'/secure'}
+                element={
+                    <RequireAuth loginPath={'/login'}>
+                        <div>Secure</div>
+                    </RequireAuth>
+                }
+            />
         </Routes>
     )
 }

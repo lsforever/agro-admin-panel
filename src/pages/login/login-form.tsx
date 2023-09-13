@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+import { GoogleLogin } from '@react-oauth/google'
+
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
@@ -37,12 +39,25 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                             autoCorrect='off'
                             disabled={isLoading}
                         />
+
+                        <Label className='sr-only' htmlFor='password'>
+                            Password
+                        </Label>
+                        <Input
+                            id='password'
+                            placeholder='Password'
+                            type='password'
+                            autoCapitalize='none'
+                            autoComplete='password'
+                            autoCorrect='off'
+                            disabled={isLoading}
+                        />
                     </div>
                     <Button disabled={isLoading}>
                         {isLoading && (
                             <Circle className='mr-2 h-4 w-4 animate-spin' />
                         )}
-                        Sign In with Email
+                        Login with Email
                     </Button>
                 </div>
             </form>
@@ -56,14 +71,26 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                     </span>
                 </div>
             </div>
-            <Button variant='outline' type='button' disabled={isLoading}>
+            {/* <Button variant='outline' type='button' disabled={isLoading}>
                 {isLoading ? (
                     <Circle className='mr-2 h-4 w-4 animate-spin' />
                 ) : (
                     <Circle className='mr-2 h-4 w-4' />
                 )}{' '}
-                Github
-            </Button>
+                Google
+            </Button> */}
+            <div className='flex items-center justify-center'>
+                <GoogleLogin
+                    onSuccess={(credentialResponse) => {
+                        console.log(credentialResponse)
+                        //TODOdo login part implementation
+                    }}
+                    onError={() => {
+                        console.log('Login Failed')
+                    }}
+                    useOneTap
+                />
+            </div>
         </div>
     )
 }
