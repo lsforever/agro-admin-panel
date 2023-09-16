@@ -18,7 +18,7 @@ const Pagination = ({
     siblingCount = 1,
     currentPage,
     pageSize,
-    className = 'xxx',
+    className,
 }: PaginationProps) => {
     // const {
     //     onPageChange,
@@ -28,7 +28,6 @@ const Pagination = ({
     //     pageSize,
     //     className,
     // } = props
-    console.log(className)
     const paginationRange = usePagination({
         currentPage,
         totalCount,
@@ -54,8 +53,12 @@ const Pagination = ({
     return (
         <div className='flex items-center justify-center pl-2 '>
             <div className='flex-1 text-sm  font-medium pr-1'>{`${
-                (currentPage - 1) * pageSize
-            }-${currentPage * pageSize} of ${totalCount}`}</div>
+                (currentPage - 1) * pageSize + 1
+            }-${
+                currentPage * pageSize < totalCount
+                    ? currentPage * pageSize
+                    : totalCount
+            } of ${totalCount}`}</div>
             <ul
                 className={cn(
                     'flex list-none items-center justify-center',

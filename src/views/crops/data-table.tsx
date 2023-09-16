@@ -9,6 +9,7 @@ import {
     getSortedRowModel,
     getFilteredRowModel,
     useReactTable,
+    Pagination,
 } from '@tanstack/react-table'
 
 import {
@@ -36,6 +37,11 @@ import PaginationMenu from '@/components/custom/pagination'
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    totalCount: number
+    pageSize: number
+    currentPage: number
+    onPageChange: (page: number) => void
+    onLimitChange: (limit: number) => void
 }
 // import { Table as Tablez } from '@tanstack/react-table'
 // interface DataTablePaginationProps<TData> {
@@ -50,9 +56,16 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 
+import { useNavigate } from 'react-router-dom'
+
 export function DataTable<TData, TValue>({
     columns,
     data,
+    totalCount,
+    pageSize,
+    currentPage,
+    onPageChange,
+    onLimitChange,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -78,53 +91,66 @@ export function DataTable<TData, TValue>({
             columnVisibility,
             rowSelection,
         },
+        manualPagination: true,
     })
+
+    const navigate = useNavigate()
 
     return (
         <div>
-            <div className='flex items-center py-4'>
+            <div className='flex items-center justify-between py-4'>
                 <Input
-                    id='filter-email'
-                    placeholder='Filter emails...'
+                    id='filter-name'
+                    placeholder='Filter by name...'
                     value={
-                        (table
-                            .getColumn('email')
-                            ?.getFilterValue() as string) ?? ''
+                        (table.getColumn('name')?.getFilterValue() as string) ??
+                        ''
                     }
                     onChange={(event) =>
                         table
-                            .getColumn('email')
+                            .getColumn('name')
                             ?.setFilterValue(event.target.value)
                     }
                     className='max-w-sm'
                 />
+                <div className='flex '>
+                    <Button
+                        variant='outline'
+                        className='ml-auto mr-4'
+                        onClick={() => {
+                            navigate('create')
+                        }}
+                    >
+                        Create
+                    </Button>
 
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant='outline' className='ml-auto'>
-                            Columns
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align='end'>
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className='capitalize'
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant='outline' className='ml-auto'>
+                                Columns
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align='end'>
+                            {table
+                                .getAllColumns()
+                                .filter((column) => column.getCanHide())
+                                .map((column) => {
+                                    return (
+                                        <DropdownMenuCheckboxItem
+                                            key={column.id}
+                                            className='capitalize'
+                                            checked={column.getIsVisible()}
+                                            onCheckedChange={(value) =>
+                                                column.toggleVisibility(!!value)
+                                            }
+                                        >
+                                            {column.id}
+                                        </DropdownMenuCheckboxItem>
+                                    )
+                                })}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </div>
             <div className='rounded-md border'>
                 <Table>
@@ -207,6 +233,7 @@ export function DataTable<TData, TValue>({
                         value={`${table.getState().pagination.pageSize}`}
                         onValueChange={(value) => {
                             table.setPageSize(Number(value))
+                            onLimitChange(Number(value))
                         }}
                     >
                         <SelectTrigger className='h-8 w-[70px]'>
@@ -217,7 +244,7 @@ export function DataTable<TData, TValue>({
                             />
                         </SelectTrigger>
                         <SelectContent side='top'>
-                            {[10, 20, 30, 40, 50].map((pageSize) => (
+                            {[5, 10, 20, 30, 40, 50].map((pageSize) => (
                                 <SelectItem
                                     key={pageSize}
                                     value={`${pageSize}`}
@@ -231,12 +258,12 @@ export function DataTable<TData, TValue>({
 
                 <PaginationMenu
                     onPageChange={(page) => {
-                        console.log(page)
+                        onPageChange(Number(page))
                     }}
                     siblingCount={1}
-                    totalCount={1000}
-                    pageSize={5}
-                    currentPage={1}
+                    totalCount={totalCount}
+                    pageSize={pageSize}
+                    currentPage={currentPage}
                     //className='text-primary'
                 />
             </div>
