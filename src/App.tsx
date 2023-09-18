@@ -6,8 +6,13 @@ import { AuthProvider } from 'react-auth-kit'
 
 import { Toaster } from '@/components/ui/toaster'
 
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 const queryClient = new QueryClient()
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
+import axios from 'axios'
+import { API_BASE_URL } from '@/lib/config'
+axios.defaults.baseURL = API_BASE_URL
 
 function App() {
     return (
@@ -22,6 +27,7 @@ function App() {
                     >
                         <Main />
                         <Toaster />
+                        <ReactQueryDevtools initialIsOpen />
                     </AuthProvider>
                 </BrowserRouter>
             </QueryClientProvider>

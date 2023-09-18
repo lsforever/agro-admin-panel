@@ -8,9 +8,19 @@ import { Label } from '@/components/ui/label'
 
 import { GoogleLogin } from '@react-oauth/google'
 
+import { useSignIn } from 'react-auth-kit'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+
+import { TOKEN_EXPIRATION_IN_MINUTES } from '@/lib/config'
+
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
+type tokenProps = { data: { token: string; user: object } }
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+    const signIn = useSignIn()
+    const navigate = useNavigate()
+
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
     async function onSubmit(event: React.SyntheticEvent) {
@@ -19,7 +29,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
         setTimeout(() => {
             setIsLoading(false)
-        }, 3000)
+        }, 5000)
     }
 
     return (
@@ -81,9 +91,30 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </Button> */}
             <div className='flex items-center justify-center'>
                 <GoogleLogin
-                    onSuccess={(credentialResponse) => {
-                        console.log(credentialResponse)
-                        //TODOdo login part implementation
+                    onSuccess={async (credentialResponse) => {
+                        //console.log()
+                        const res: tokenProps = await axios.post(
+                            'auth/google/token',
+                            {
+                                token: credentialResponse.credential,
+                            }
+                        )
+                        const { token, user } = res.data
+                        if (
+                            signIn({
+                                token: token,
+                                expiresIn: TOKEN_EXPIRATION_IN_MINUTES,
+                                tokenType: 'Bearer',
+                                authState: user,
+                            })
+                        ) {
+                            // Redirect or do-something
+                            navigate('/')
+                        } else {
+                            //Throw error
+                            //TODO show error by toast
+                            console.log('Login Failed')
+                        }
                     }}
                     onError={() => {
                         console.log('Login Failed')

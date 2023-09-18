@@ -4,7 +4,25 @@ import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import { UserAuthForm } from '@/pages/login/login-form'
 
+import { useIsAuthenticated } from 'react-auth-kit'
+import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+
 export default function Login() {
+    const navigate = useNavigate()
+    const isAuthenticated = useIsAuthenticated()
+
+    useEffect(() => {
+        if (isAuthenticated()) {
+            // Redirect to Dashboard
+            //return redirect('/secure')
+            navigate('/')
+        }
+    }, [navigate, isAuthenticated])
+
+    if (isAuthenticated()) {
+        return null
+    }
     return (
         <>
             <div className='md:hidden'>

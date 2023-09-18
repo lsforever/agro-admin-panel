@@ -9,7 +9,7 @@ import {
     getSortedRowModel,
     getFilteredRowModel,
     useReactTable,
-    Pagination,
+    //Pagination,
 } from '@tanstack/react-table'
 
 import {

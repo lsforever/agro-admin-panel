@@ -25,7 +25,8 @@
             "@/state/*": ["./src/state/*"],
             "@/pages/*": ["./src/pages/*"],
             "@/hooks/*": ["./src/hooks/*"],
-            "@/views/*": ["./src/views/*"]
+            "@/views/*": ["./src/views/*"],
+            "@/lib/*": ["./src/lib/*"]
         }
     },
     "include": ["src"],

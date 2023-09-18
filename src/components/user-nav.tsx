@@ -11,7 +11,13 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
+import { useAuthUser, useSignOut } from 'react-auth-kit'
+
 export function UserNav() {
+    const signOut = useSignOut()
+    const auth = useAuthUser()
+    const user = auth()
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -21,7 +27,11 @@ export function UserNav() {
                 >
                     <Avatar className='h-8 w-8'>
                         <AvatarImage
-                            src='https://ui.shadcn.com/avatars/01.png'
+                            //src='https://ui.shadcn.com/avatars/01.png'
+                            src={
+                                user?.photo ||
+                                'https://ui.shadcn.com/avatars/04.png'
+                            }
                             alt='@avatar'
                         />
                         <AvatarFallback>SC</AvatarFallback>
@@ -32,10 +42,12 @@ export function UserNav() {
                 <DropdownMenuLabel className='font-normal'>
                     <div className='flex flex-col space-y-1'>
                         <p className='text-sm font-medium leading-none'>
-                            johntx
+                            {/* johntx */}
+                            {user?.name}
                         </p>
                         <p className='text-xs leading-none text-muted-foreground'>
-                            m@example.com
+                            {/* m@example.com */}
+                            {user?.email}
                         </p>
                     </div>
                 </DropdownMenuLabel>
@@ -45,18 +57,22 @@ export function UserNav() {
                         Profile
                         <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    {/* <DropdownMenuItem>
                         Billing
                         <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
                     <DropdownMenuItem>
                         Settings
                         <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>New Team</DropdownMenuItem>
+                    {/* <DropdownMenuItem>New Team</DropdownMenuItem> */}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                    onClick={() => {
+                        signOut()
+                    }}
+                >
                     Log out
                     <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                 </DropdownMenuItem>
