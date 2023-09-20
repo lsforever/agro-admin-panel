@@ -35,6 +35,8 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
+import UploadComponent from '@/components/custom/upload'
+import { Label } from '@/components/ui/label'
 
 const climateZones = [
   {
@@ -64,6 +66,9 @@ const cropFormSchema = z.object({
   category: z.string().length(24, {
     message: 'Category must be an ID.',
   }),
+  image: z
+    .instanceof(File)
+    .refine((files) => files?.length == 1, 'File is required.'),
   botanical: z
     .string()
     .min(2, {
@@ -473,7 +478,6 @@ export default function Create() {
               Add Varieties
             </Button>
           </div>
-
           <FormItem>
             <FormLabel>Rainfall Range</FormLabel>
             <FormField
@@ -506,7 +510,6 @@ export default function Create() {
               )}
             />
           </FormItem>
-
           <FormItem>
             <FormLabel>Soil PH Range</FormLabel>
             <FormField
@@ -538,7 +541,6 @@ export default function Create() {
               )}
             />
           </FormItem>
-
           <FormItem>
             <FormLabel>Crop Duration</FormLabel>
             <FormField
@@ -570,7 +572,6 @@ export default function Create() {
               )}
             />
           </FormItem>
-
           <FormField
             control={form.control}
             name='factors.zones'
@@ -619,7 +620,6 @@ export default function Create() {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name='other.extra'
@@ -637,7 +637,6 @@ export default function Create() {
               </FormItem>
             )}
           />
-
           <div>
             <div>
               <FormLabel>Tutorials</FormLabel>
@@ -696,7 +695,6 @@ export default function Create() {
               Add Tutorials
             </Button>
           </div>
-
           <div>
             <div>
               <FormLabel>Videos</FormLabel>
@@ -755,7 +753,6 @@ export default function Create() {
               Add Videos
             </Button>
           </div>
-
           {/* <Button
             onClick={() => {
               form.setValue('factors.zones', ['dry'], { shouldValidate: true })
@@ -763,7 +760,6 @@ export default function Create() {
           >
             zzzzze
           </Button> */}
-
           {mutation.isLoading ? (
             <Button disabled>
               <Loader2 className='mr-2 h-4 w-4 animate-spin' />
@@ -772,12 +768,42 @@ export default function Create() {
           ) : (
             <Button type='submit'>Update profile</Button>
           )}
-          {/* <Button type='submit'>Update profile</Button> */}
 
+          <FormField
+            control={form.control}
+            name='image'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Extra Details of Crop</FormLabel>
+                <FormControl>
+                  {/* <Input type='file' placeholder='Select File' {...field} /> */}
+                </FormControl>
+                <FormDescription>
+                  Add the link to a markdown file that contains extra details
+                  about the crop.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormItem>
+            <FormLabel htmlFor='file_input'>Upload file</FormLabel>
+            <Input
+              aria-describedby='file_input_help'
+              id='file_input'
+              type='file'
+            />
+            <FormDescription id='file_input_help'>
+              SVG, PNG, JPG or GIF (MAX. 800x400px).
+            </FormDescription>
+          </FormItem>
+
+          {/* <Button type='submit'>Update profile</Button> */}
           {/* <Button disabled>
             <Loader2 className='mr-2 h-4 w-4 animate-spin' />
             Please wait
           </Button> */}
+          {/* <UploadComponent /> */}
         </form>
       </Form>
     </ScrollArea>
