@@ -7,13 +7,7 @@ export const createImage = (url: string) =>
     image.src = url as string
   })
 
-type cropType = {
-  x: number
-  y: number
-  width: number
-  height: number
-}
-
+import { type Crop } from 'react-image-crop'
 /**
  * This method returns image crop with size less than or needed size
  * crop should be aspect ratio locked. and needed size should be in that same aspect ratio
@@ -21,17 +15,17 @@ type cropType = {
  */
 export default async function getCroppedImg(
   imageSrc: string,
-  pixelCrop: cropType,
+  pixelCrop: Crop,
   quality = 0.8,
   neededWidth = 400,
   neededHeight = 300,
   isNeededAsBase64 = false,
-): Promise<Blob | string | null> {
+): Promise<string | undefined> {
   const image: HTMLImageElement = await createImage(imageSrc)
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
   if (!ctx) {
-    return null
+    return undefined
   }
   canvas.width = image.width
   canvas.height = image.height
@@ -39,7 +33,7 @@ export default async function getCroppedImg(
   const croppedCanvas = document.createElement('canvas')
   const croppedCtx = croppedCanvas.getContext('2d')
   if (!croppedCtx) {
-    return null
+    return undefined
   }
 
   const isLarge = pixelCrop.width > neededWidth

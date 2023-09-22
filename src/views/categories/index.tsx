@@ -24,10 +24,10 @@ export default function CropPage() {
   })
 
   const { isLoading, isError, error, data, isFetching } = useQuery({
-    queryKey: ['crops', query],
+    queryKey: ['categories', query],
     queryFn: async () => {
       const data = await axios.get(
-        'crops',
+        'categories',
 
         {
           params: query,
@@ -43,11 +43,12 @@ export default function CropPage() {
 
   if (isLoading) return <Loading />
   if (isFetching) return <div>fetching</div>
-  if (isError) return 'An error has occurred ...'
-  console.log(error)
+  if (isError) return 'An error has occurred: ' + error
 
   //TODO add prefetch for next page
-  const crops = data?.data.data
+  const categories = data?.data.data
+  console.log(data)
+  console.log(categories)
   return (
     <div className='container mx-auto py-0'>
       {/* {JSON.stringify(data?.data.data.docs, null, 4)} */}
@@ -55,10 +56,10 @@ export default function CropPage() {
       {/* <DataTable columns={columns} data={data} /> */}
       <DataTable
         columns={columns}
-        data={crops.docs}
-        totalCount={crops.totalDocs}
-        pageSize={crops.limit}
-        currentPage={crops.page}
+        data={categories.docs}
+        totalCount={categories.totalDocs}
+        pageSize={categories.limit}
+        currentPage={categories.page}
         onPageChange={(page) => {
           setQuery({
             filter: {},

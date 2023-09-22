@@ -1,11 +1,15 @@
 import Home from '@/pages/home'
 import Login from '@/pages/login'
 import CropPage from '@/views/crops'
+import CategoryPage from '@/views/categories'
 import { Routes, Route } from 'react-router-dom'
 import { RequireAuth } from 'react-auth-kit'
 
 import CropEdit from '@/views/crops/edit'
 import CropCreate from '@/views/crops/create'
+import CategoryCreate from '@/views/categories/create'
+import CategoryEdit from '@/views/categories/edit'
+
 import Dashboard from '@/views/dashboard'
 import Loading from '@/components/custom/loading'
 import ImageCropDemo from '@/views/users'
@@ -38,10 +42,9 @@ const Main = () => {
         <Route path='crops/create' element={<CropCreate />} />
         <Route path='crops/:id' element={<Loading />} />
 
-        <Route
-          path='categories'
-          element={<h1 className='w-full'>Categories</h1>}
-        />
+        <Route path='categories' element={<CategoryPage />} />
+        <Route path='categories/create' element={<CategoryCreate />} />
+        <Route path='categories/edit/:id' element={<CategoryEdit />} />
 
         <Route
           path='users'

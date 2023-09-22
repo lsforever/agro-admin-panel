@@ -10,24 +10,17 @@ type ImageCropProps = {
   src: string | undefined
 }
 export default function ImageCropDemo({ src }: ImageCropProps) {
-  const [crop, setCrop] = useState<Crop>()
-  const [blob, setBlob] = useState()
-
-  // const showCroppedImage = async () => {
-  //   try {
-  //     const croppedImage = await getCroppedImg(src, crop)
-  //     //console.log('done', { croppedImage })
-  //     setBlob(croppedImage)
-  //     //setCroppedImage(croppedImage)
-  //   } catch (e) {
-  //     console.error(e)
-  //   }
-  // }
+  const [crop, setCrop] = useState<Crop | undefined>(undefined)
+  const [blob, setBlob] = useState<string | undefined>(undefined)
 
   const expensiveCalculation = throttle(async () => {
-    const croppedImage = await getCroppedImage(src, crop, 0.8, 400, 300, true)
-    //console.log('done', { croppedImage })
-    setBlob(croppedImage)
+    const croppedImage =
+      src && crop
+        ? await getCroppedImage(src, crop, 0.8, 400, 300, false)
+        : undefined
+    if (croppedImage) {
+      setBlob(croppedImage)
+    }
   }, 100)
 
   return (
@@ -39,7 +32,6 @@ export default function ImageCropDemo({ src }: ImageCropProps) {
         aspect={4 / 3}
         onChange={(c) => {
           setCrop(c)
-          //showCroppedImage()
           expensiveCalculation()
         }}
       >
