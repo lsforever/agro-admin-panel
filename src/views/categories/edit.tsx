@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input'
 
 import { useToast } from '@/components/ui/use-toast'
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { useAuthHeader } from 'react-auth-kit'
 
@@ -24,6 +24,10 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useForm } from 'react-hook-form'
+
+import { useParams } from 'react-router-dom'
+import Loading from '@/components/custom/loading'
+import { useEffect } from 'react'
 
 const categoryFormSchema = z.object({
   name: z
@@ -44,6 +48,8 @@ type CategoryFormValues = z.infer<typeof categoryFormSchema>
 const defaultValues: Partial<CategoryFormValues> = {}
 
 export default function Edit() {
+  const { categoryId } = useParams()
+
   const { toast } = useToast()
 
   const form = useForm<CategoryFormValues>({
@@ -54,13 +60,27 @@ export default function Edit() {
 
   /////////////////////////////////////////////////////////
 
+  const { isLoading, isError, error, isFetching, data } = useQuery({
+    queryKey: ['categories', categoryId],
+    queryFn: async () => {
+      const data = await axios.get(`categories/${categoryId}`, {
+        headers: { Authorization: header },
+      })
+      return data
+    },
+    keepPreviousData: true,
+    staleTime: Infinity,
+  })
+
+  /////////////////////////////////////////////////////////
+
   const authHeader = useAuthHeader()
   const header = authHeader()
   const queryClient = useQueryClient()
 
   const mutation = useMutation({
-    mutationFn: async (cropData: unknown) => {
-      const data = await axios.post('categories', cropData, {
+    mutationFn: async (categoryData: unknown) => {
+      const data = await axios.post(`categories/${categoryId}`, categoryData, {
         headers: {
           Authorization: header,
         },
@@ -98,6 +118,7 @@ export default function Edit() {
       })
     },
   })
+
   //////////////////////////////////////////////////////////
 
   //   function transformData(data: CategoryFormValues) {
@@ -166,6 +187,14 @@ export default function Edit() {
     })
   }
 
+  const categoryName = data?.data.data.name
+  useEffect(() => {
+    form.setValue('name', categoryName)
+  }, [data, categoryName, form])
+
+  if (isLoading || isFetching) return <Loading />
+  if (isError) return 'An error has occurred: ' + error
+
   return (
     <ScrollArea className='h-full w-full'>
       <Form {...form}>
@@ -173,6 +202,12 @@ export default function Edit() {
           onSubmit={form.handleSubmit(onSubmit, onError)}
           className='mb-20 w-max space-y-8 p-4'
         >
+          <FormItem>
+            <FormLabel>Category ID</FormLabel>
+            <Input type='text' disabled={true} value={categoryId} />
+            <FormDescription>ID of the category to be edited</FormDescription>
+          </FormItem>
+
           <FormField
             control={form.control}
             name='name'
@@ -197,7 +232,7 @@ export default function Edit() {
               Please wait
             </Button>
           ) : (
-            <Button type='submit'>Create</Button>
+            <Button type='submit'>Edit Category</Button>
           )}
         </form>
       </Form>

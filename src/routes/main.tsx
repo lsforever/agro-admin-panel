@@ -40,11 +40,11 @@ const Main = () => {
         <Route path='crops' element={<CropPage />} />
         <Route path='crops/edit' element={<CropEdit />} />
         <Route path='crops/create' element={<CropCreate />} />
-        <Route path='crops/:id' element={<Loading />} />
+        <Route path='crops/:cropId' element={<Loading />} />
 
         <Route path='categories' element={<CategoryPage />} />
         <Route path='categories/create' element={<CategoryCreate />} />
-        <Route path='categories/edit/:id' element={<CategoryEdit />} />
+        <Route path='categories/edit/:categoryId' element={<CategoryEdit />} />
 
         <Route
           path='users'

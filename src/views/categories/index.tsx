@@ -47,8 +47,6 @@ export default function CropPage() {
 
   //TODO add prefetch for next page
   const categories = data?.data.data
-  console.log(data)
-  console.log(categories)
   return (
     <div className='container mx-auto py-0'>
       {/* {JSON.stringify(data?.data.data.docs, null, 4)} */}
