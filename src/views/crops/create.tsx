@@ -191,6 +191,8 @@ const cropFormSchema = z.object({
 
 type CropFormValues = z.infer<typeof cropFormSchema>
 
+export type CropType = CropFormValues & { _id: string }
+
 // This can come from your database or API.
 const defaultValues: Partial<CropFormValues> = {
   name: 'xxxx',
