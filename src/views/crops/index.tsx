@@ -49,7 +49,8 @@ export default function CropPage() {
   //TODO add prefetch for next page
   const crops = data?.data.data
   return (
-    <div className='container mx-auto py-0'>
+    <div className='container mx-auto'>
+      {/* <div className=' p-6 w-full py-0'> */}
       {/* {JSON.stringify(data?.data.data.docs, null, 4)} */}
 
       {/* <DataTable columns={columns} data={data} /> */}

@@ -3,6 +3,17 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useFieldArray, useForm } from 'react-hook-form'
 import * as z from 'zod'
 
+import { CropIcon } from 'lucide-react'
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -33,10 +44,11 @@ import { Trash } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 import { Loader2 } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import { useState } from 'react'
-import UploadComponent from '@/components/custom/upload'
-import { Label } from '@/components/ui/label'
+import ImageCropperOnly from '@/components/custom/image-crop-only'
+import { Separator } from '@/components/ui/separator'
+
+const allowedFileTypes = 'image/png, image/jpeg, image/x-png'
 
 const climateZones = [
   {
@@ -66,9 +78,7 @@ const cropFormSchema = z.object({
   category: z.string().length(24, {
     message: 'Category must be an ID.',
   }),
-  image: z
-    .instanceof(File)
-    .refine((files) => files?.length == 1, 'File is required.'),
+  image: z.string().min(1, { message: 'Image should not be empty' }),
   botanical: z
     .string()
     .min(2, {
@@ -328,12 +338,45 @@ export default function Create() {
     })
   }
 
+  // ===========================================================
+  // ===========================================================
+  // ===========================================================
+  // ===========================================================
+  // ===========================================================
+  // ===========================================================
+
+  const [image, setImage] = useState<string | undefined>(undefined)
+  const [blob, setBlob] = useState<string | undefined>(undefined)
+  const [cropOpen, setCropOpen] = useState(false)
+
+  const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onefile = event.target.files ? event.target.files[0] : undefined
+    setImage(URL.createObjectURL(onefile!))
+    setBlob(undefined)
+  }
+
+  const onBlobValueChange = (blob: string) => {
+    form.setValue('image', blob)
+    setBlob(blob)
+  }
+
+  // ===========================================================
+  // ===========================================================
   return (
-    <ScrollArea className='h-full w-full'>
+    <ScrollArea className='mx-10 h-full w-full'>
+      <div className='mr-10 mt-4 space-y-4'>
+        <h3 className='text-lg font-medium'>Create Crop</h3>
+        <p className='text-sm text-muted-foreground'>
+          Enter details to create a crop. Please select unique name for each
+          crop.
+        </p>
+        <Separator />
+      </div>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className='mb-20 w-max space-y-8 p-4'
+          className='mb-20 w-max space-y-8 py-6 px-16'
         >
           <FormField
             control={form.control}
@@ -384,7 +427,7 @@ export default function Create() {
                                     </SelectContent> */}
 
                     <SelectContent>
-                      {query.data?.data.data.map(
+                      {query.data?.data.data.docs.map(
                         (category: { _id: string; name: string }) => {
                           return (
                             <SelectItem key={category._id} value={category._id}>
@@ -762,50 +805,77 @@ export default function Create() {
           >
             zzzzze
           </Button> */}
+
+          <FormItem>
+            <FormLabel htmlFor='crop-image'>Select Image</FormLabel>
+            <div className='flex items-center gap-2'>
+              <Input
+                id='crop-image'
+                name='Select Image'
+                type='file'
+                multiple={false}
+                accept={allowedFileTypes}
+                onChange={onImageChange}
+              />
+              <Dialog open={cropOpen} onOpenChange={setCropOpen}>
+                <DialogTrigger asChild>
+                  {image ? (
+                    <Button className='w-[180px]' variant='secondary' size='sm'>
+                      <CropIcon className='mr-2 h-4 w-4' />
+                      Crop Image
+                    </Button>
+                  ) : null}
+                </DialogTrigger>
+                <DialogContent className='h-[500px] min-h-[500px] w-[800px] min-w-[800px] '>
+                  {/* sm:max-w-[425px] */}
+                  <DialogHeader>
+                    <DialogTitle>Edit profile</DialogTitle>
+                    <DialogDescription>
+                      Make changes to your profile here. Click save when you're
+                      done.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div>
+                    <ImageCropperOnly
+                      image={image}
+                      setBlob={onBlobValueChange}
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button onClick={() => setCropOpen(false)}>Done</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+            <div className='pt-1'>
+              {blob ? (
+                <img
+                  className='h-[300px] w-auto rounded-lg border-4'
+                  alt='img'
+                  src={blob}
+                />
+              ) : (
+                <div className='flex h-[200px] w-auto items-center  justify-center  rounded-lg border-2'>
+                  <p className='text-sm  text-muted-foreground'>
+                    No Cropped Image
+                  </p>
+                </div>
+              )}
+            </div>
+            <FormDescription id='image_select_help'>
+              {/* SVG, PNG, JPG or GIF (MAX. 800x400px). */}
+              PNG, JPG (MIN. 30x30px).
+            </FormDescription>
+          </FormItem>
+
           {mutation.isLoading ? (
             <Button disabled>
               <Loader2 className='mr-2 h-4 w-4 animate-spin' />
               Please wait
             </Button>
           ) : (
-            <Button type='submit'>Update profile</Button>
+            <Button type='submit'>Create Crop</Button>
           )}
-
-          <FormField
-            control={form.control}
-            name='image'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Extra Details of Crop</FormLabel>
-                <FormControl>
-                  {/* <Input type='file' placeholder='Select File' {...field} /> */}
-                </FormControl>
-                <FormDescription>
-                  Add the link to a markdown file that contains extra details
-                  about the crop.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormItem>
-            <FormLabel htmlFor='file_input'>Upload file</FormLabel>
-            <Input
-              aria-describedby='file_input_help'
-              id='file_input'
-              type='file'
-            />
-            <FormDescription id='file_input_help'>
-              SVG, PNG, JPG or GIF (MAX. 800x400px).
-            </FormDescription>
-          </FormItem>
-
-          {/* <Button type='submit'>Update profile</Button> */}
-          {/* <Button disabled>
-            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-            Please wait
-          </Button> */}
-          {/* <UploadComponent /> */}
         </form>
       </Form>
     </ScrollArea>

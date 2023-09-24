@@ -13,7 +13,7 @@ import { type Crop } from 'react-image-crop'
  * crop should be aspect ratio locked. and needed size should be in that same aspect ratio
  * The crop with size of needed or less than that will be sent. Less than that will only be sent if the crop size is lower than the needed size.
  */
-export default async function getCroppedImg(
+export default async function getCroppedImage(
   imageSrc: string,
   pixelCrop: Crop,
   quality = 0.8,

@@ -1,6 +1,3 @@
-import { Metadata } from 'next'
-
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
