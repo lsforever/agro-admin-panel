@@ -304,15 +304,48 @@ export default function Create() {
     control: form.control,
   })
 
+  // ===========================================================
+  // ===========================================================
+  // ===========================================================
+  // ===========================================================
+  // ===========================================================
+  // ===========================================================
+
+  const [image, setImage] = useState<string | undefined>(undefined)
+  const [blob, setBlob] = useState<string | undefined>(undefined)
+  const [cropOpen, setCropOpen] = useState(false)
+
+  const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onefile = event.target.files ? event.target.files[0] : undefined
+    setImage(URL.createObjectURL(onefile!))
+    setBlob(undefined)
+  }
+
+  const onBlobValueChange = (blob: string) => {
+    form.setValue('image', blob)
+    setBlob(blob)
+  }
+
+  // ===========================================================
+  // ===========================================================
+
   function transformData(data: CropFormValues) {
     const newData = {
       ...data,
       varieties: data.varieties.map((v) => v.value),
     }
+
+    const newFormData = new FormData()
+    newFormData.append('data', JSON.stringify(newData))
+    const file = new File([blob!], 'image.jpeg')
+
+    //newFormData.append('image', blob, 'filename.jpg')
+    newFormData.append('image', file)
     return newData
   }
 
   function onSubmit(data: CropFormValues) {
+    if (!blob) return
     const finalData = transformData(data)
     mutation.mutate(finalData)
     toast({
@@ -338,30 +371,6 @@ export default function Create() {
     })
   }
 
-  // ===========================================================
-  // ===========================================================
-  // ===========================================================
-  // ===========================================================
-  // ===========================================================
-  // ===========================================================
-
-  const [image, setImage] = useState<string | undefined>(undefined)
-  const [blob, setBlob] = useState<string | undefined>(undefined)
-  const [cropOpen, setCropOpen] = useState(false)
-
-  const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const onefile = event.target.files ? event.target.files[0] : undefined
-    setImage(URL.createObjectURL(onefile!))
-    setBlob(undefined)
-  }
-
-  const onBlobValueChange = (blob: string) => {
-    form.setValue('image', blob)
-    setBlob(blob)
-  }
-
-  // ===========================================================
-  // ===========================================================
   return (
     <ScrollArea className='mx-10 h-full w-full'>
       <div className='mr-10 mt-4 space-y-4'>
@@ -376,7 +385,7 @@ export default function Create() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className='mb-20 w-max space-y-8 py-6 px-16'
+          className='mb-20 w-max space-y-8 px-16 py-6'
         >
           <FormField
             control={form.control}
