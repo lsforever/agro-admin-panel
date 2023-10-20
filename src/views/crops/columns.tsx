@@ -14,6 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 // }
 import { CropType as Crop } from './create' //This is a zod schema
 import { ActionsList } from './actions-list'
+import { Badge } from '@/components/ui/badge'
 
 export const columns: ColumnDef<Crop>[] = [
   {
@@ -53,11 +54,20 @@ export const columns: ColumnDef<Crop>[] = [
       )
     },
   },
+  {
+    accessorKey: 'category',
+    header: () => <div>Category</div>,
+    cell: ({ row }) => {
+      const category: { name: string } = row.getValue('category')
+      return <Badge>{category.name}</Badge>
+    },
+  },
 
   {
     accessorKey: 'botanical',
     header: () => <div>Botanical Name</div>,
   },
+
   // {
   //   id: 'actions',
   //   cell: ({ row }) => {

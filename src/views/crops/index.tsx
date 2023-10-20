@@ -44,7 +44,6 @@ export default function CropPage() {
   if (isLoading) return <Loading />
   if (isFetching) return <div>fetching</div>
   if (isError) return 'An error has occurred ...'
-  console.log(error)
 
   //TODO add prefetch for next page
   const crops = data?.data.data

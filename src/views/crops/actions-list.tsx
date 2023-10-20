@@ -33,6 +33,7 @@ import {
 } from '@/components/ui/sheet'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
+import { API_IMAGE_BASE_URL } from '@/lib/config'
 
 export const ActionsList = ({ crop }: { crop: Crop }) => {
   const authHeader = useAuthHeader()
@@ -120,19 +121,29 @@ export const ActionsList = ({ crop }: { crop: Crop }) => {
           </SheetHeader>
 
           <div className='mt-6 py-4'>
+            <Separator className='my-2' />
             <div>
               <div className='text-sm'>Crop ID</div>
-              <div className='p-2 text-sm text-muted-foreground'>
+              <div className='p-4 text-sm text-muted-foreground'>
                 {crop._id}
               </div>
             </div>
 
-            <Separator className='my-2' />
-
             <div>
               <div className='text-sm'>Crop Name</div>
-              <div className='p-2 text-sm text-muted-foreground'>
+              <div className='p-4 text-sm text-muted-foreground'>
                 {crop.name}
+              </div>
+            </div>
+
+            <div>
+              <div className='text-sm'>Crop Image</div>
+              <div className='mt-1 p-4'>
+                <img
+                  className='rounded-lg border'
+                  src={`${API_IMAGE_BASE_URL}${crop.image}`}
+                  alt='crop image'
+                />
               </div>
             </div>
           </div>

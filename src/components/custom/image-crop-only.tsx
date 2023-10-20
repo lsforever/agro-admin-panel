@@ -69,7 +69,6 @@ export default function ImageCropperOnly({
       imgRef.current!.naturalHeight,
     )
 
-    console.log(convertedPixelCrop)
     const croppedImage = await getCroppedImage(
       image!,
       convertedPixelCrop,

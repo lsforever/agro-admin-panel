@@ -249,6 +249,7 @@ export default function Create() {
       const data = await axios.post('crops', cropData, {
         headers: {
           Authorization: header,
+          //'Content-Type': 'multipart/form-data',
         },
       })
       return data
@@ -263,10 +264,10 @@ export default function Create() {
       form.reset()
       //form.setValue('category', query.data?.data.data[0]._id)
     },
-    onError: () => {
+    onError: ({ error }) => {
       toast({
         title: 'Error',
-        description: 'Crop creation failed. Please retry...',
+        description: 'Crop creation failed. Please retry... ' + error.message,
       })
     },
   })
@@ -329,7 +330,7 @@ export default function Create() {
   // ===========================================================
   // ===========================================================
 
-  function transformData(data: CropFormValues) {
+  async function transformData(data: CropFormValues) {
     const newData = {
       ...data,
       varieties: data.varieties.map((v) => v.value),
@@ -337,16 +338,21 @@ export default function Create() {
 
     const newFormData = new FormData()
     newFormData.append('data', JSON.stringify(newData))
-    const file = new File([blob!], 'image.jpeg')
 
-    //newFormData.append('image', blob, 'filename.jpg')
-    newFormData.append('image', file)
-    return newData
+    const fetchBlob = await fetch(blob!).then((r) => r.blob())
+
+    // const file = new File([fetchBlob], 'image.jpg', {
+    //   type: fetchBlob.type,
+    // })
+
+    newFormData.append('image', fetchBlob, 'image.jpg')
+    //newFormData.append('image', file)
+    return newFormData
   }
 
-  function onSubmit(data: CropFormValues) {
+  async function onSubmit(data: CropFormValues) {
     if (!blob) return
-    const finalData = transformData(data)
+    const finalData = await transformData(data)
     mutation.mutate(finalData)
     toast({
       title: 'Creating a crop',
