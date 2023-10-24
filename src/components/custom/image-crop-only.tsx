@@ -7,6 +7,7 @@ import ReactCrop, {
   convertToPixelCrop,
   PercentCrop,
 } from 'react-image-crop'
+import 'react-image-crop/dist/ReactCrop.css'
 import getCroppedImage from '@/lib/image-crop'
 import { cn } from '@/lib/utils'
 

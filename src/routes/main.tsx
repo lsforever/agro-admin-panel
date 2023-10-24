@@ -12,7 +12,7 @@ import CategoryEdit from '@/views/categories/edit'
 
 import Dashboard from '@/views/dashboard'
 import Loading from '@/components/custom/loading'
-import ImageCropDemo from '@/views/users'
+import UsersView from '@/views/users'
 
 const Main = () => {
   return (
@@ -46,10 +46,7 @@ const Main = () => {
         <Route path='categories/create' element={<CategoryCreate />} />
         <Route path='categories/edit/:categoryId' element={<CategoryEdit />} />
 
-        <Route
-          path='users'
-          element={<ImageCropDemo src='/src/assets/image.jpg' />}
-        />
+        <Route path='users' element={<UsersView />} />
       </Route>
       <Route path='/login' element={<Login />} />
 

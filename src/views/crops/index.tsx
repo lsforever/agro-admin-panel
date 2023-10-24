@@ -23,7 +23,7 @@ export default function CropPage() {
     },
   })
 
-  const { isLoading, isError, error, data, isFetching } = useQuery({
+  const { isLoading, isError, data, isFetching } = useQuery({
     queryKey: ['crops', query],
     queryFn: async () => {
       const data = await axios.get(

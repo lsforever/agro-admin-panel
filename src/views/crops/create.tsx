@@ -844,9 +844,9 @@ export default function Create() {
                 <DialogContent className='h-[500px] min-h-[500px] w-[800px] min-w-[800px] '>
                   {/* sm:max-w-[425px] */}
                   <DialogHeader>
-                    <DialogTitle>Edit profile</DialogTitle>
+                    <DialogTitle>Crop Image</DialogTitle>
                     <DialogDescription>
-                      Make changes to your profile here. Click save when you're
+                      Make changes to crop image here. Click save when you're
                       done.
                     </DialogDescription>
                   </DialogHeader>
