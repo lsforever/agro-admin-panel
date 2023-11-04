@@ -49,6 +49,8 @@ import ImageCropperOnly from '@/components/custom/image-crop-only'
 import { Separator } from '@/components/ui/separator'
 
 const allowedFileTypes = 'image/png, image/jpeg, image/x-png'
+// const allowedFileTypesMarkdown = 'text/markdown'
+const allowedFileTypesMarkdown = '.md'
 
 const climateZones = [
   {
@@ -146,17 +148,7 @@ const cropFormSchema = z.object({
         .string()
         .url({ message: 'Please enter a valid URL.' })
         .optional(),
-      //   z
-      //     .preprocess(
-      //       (e) => {
-      //         e === '' ? undefined : e
-      //       },
-      //       z.string().url({ message: 'Please enter a valid URL.' }),
-      //     )
-      //     .optional(),
-      //.union([z.string(), z.undefined()])
-      //.transform((e) => (e === '' ? undefined : e))
-      //.pipe(z.any())
+
       tutorials: z
         .array(
           z.object({
@@ -172,6 +164,18 @@ const cropFormSchema = z.object({
           }),
         )
         .optional(),
+
+      //   z
+      //     .preprocess(
+      //       (e) => {
+      //         e === '' ? undefined : e
+      //       },
+      //       z.string().url({ message: 'Please enter a valid URL.' }),
+      //     )
+      //     .optional(),
+      //.union([z.string(), z.undefined()])
+      //.transform((e) => (e === '' ? undefined : e))
+      //.pipe(z.any())
       videos: z
         .array(
           z.object({
@@ -205,11 +209,11 @@ export type CropType = CropFormValues & { _id: string }
 
 // This can come from your database or API.
 const defaultValues: Partial<CropFormValues> = {
-  name: 'xxxx',
-  botanical: 'xxxx',
-  varieties: [{ value: 'xxx' }],
-  factors: { zones: ['wet'] },
-
+  //name: 'xxxx',
+  //botanical: 'xxxx',
+  // varieties: [{ value: 'xxx' }],
+  // factors: { zones: ['wet'] },
+  factors: { zones: [] },
   //bio: "I own a computer.",
   //factors: { rainfall: { min: 0, max: 0 } },
   //   urls: [
@@ -312,6 +316,8 @@ export default function Create() {
   // ===========================================================
   // ===========================================================
 
+  const [markdown, setMarkdown] = useState<File | undefined>(undefined)
+
   const [image, setImage] = useState<string | undefined>(undefined)
   const [blob, setBlob] = useState<string | undefined>(undefined)
   const [cropOpen, setCropOpen] = useState(false)
@@ -346,6 +352,7 @@ export default function Create() {
     // })
 
     newFormData.append('image', fetchBlob, 'image.jpg')
+    if (markdown) newFormData.append('markdown', markdown)
     //newFormData.append('image', file)
     return newFormData
   }
@@ -683,17 +690,29 @@ export default function Create() {
           <FormField
             control={form.control}
             name='other.extra'
-            render={({ field }) => (
+            render={() => (
               <FormItem>
-                <FormLabel>Extra Details of Crop</FormLabel>
-                <FormControl>
-                  <Input placeholder='Extra details link' {...field} />
-                </FormControl>
-                <FormDescription>
-                  Add the link to a markdown file that contains extra details
-                  about the crop.
+                <FormLabel htmlFor='crop-markdown'>
+                  Extra Details of Crop
+                </FormLabel>
+                <div className='flex items-center gap-2'>
+                  <Input
+                    id='crop-markdown'
+                    name='Select File'
+                    type='file'
+                    multiple={false}
+                    accept={allowedFileTypesMarkdown}
+                    onChange={(event) => {
+                      if (event.target.files && event.target.files[0]) {
+                        setMarkdown(event.target.files[0])
+                      }
+                    }}
+                  />
+                </div>
+                <FormDescription id='markdown_select_help'>
+                  {/* SVG, PNG, JPG or GIF (MAX. 800x400px). */}
+                  (.md) file type only - max 4mb.
                 </FormDescription>
-                <FormMessage />
               </FormItem>
             )}
           />
