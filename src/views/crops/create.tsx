@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useFieldArray, useForm } from 'react-hook-form'
 import * as z from 'zod'
 
-import { CropIcon, Check } from 'lucide-react'
+import { CropIcon } from 'lucide-react'
 
 import {
   Dialog,
