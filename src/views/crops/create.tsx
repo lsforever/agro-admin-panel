@@ -181,8 +181,8 @@ const cropFormSchema = z.object({
       }),
       soil: z
         .object({
-          min: z.coerce.number().nonnegative().optional(),
-          max: z.coerce.number().nonnegative().optional(),
+          min: z.coerce.number().min(3.5).max(10).nonnegative().optional(),
+          max: z.coerce.number().min(3.5).max(10).nonnegative().optional(),
         })
         .optional(),
       duration: z
