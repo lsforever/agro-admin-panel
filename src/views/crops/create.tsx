@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useFieldArray, useForm } from 'react-hook-form'
 import * as z from 'zod'
 
-import { CropIcon } from 'lucide-react'
+import { CropIcon, Check } from 'lucide-react'
 
 import {
   Dialog,
@@ -65,6 +65,57 @@ const climateZones = [
   {
     id: 'dry',
     label: 'Dry Zone',
+  },
+]
+
+const monthsList = [
+  {
+    id: 1,
+    label: 'January',
+  },
+  {
+    id: 2,
+    label: 'February',
+  },
+  {
+    id: 3,
+    label: 'March',
+  },
+  {
+    id: 4,
+    label: 'April',
+  },
+  {
+    id: 5,
+    label: 'May',
+  },
+  {
+    id: 6,
+    label: 'June',
+  },
+  {
+    id: 7,
+    label: 'July',
+  },
+  {
+    id: 8,
+    label: 'August',
+  },
+  {
+    id: 9,
+    label: 'September',
+  },
+  {
+    id: 10,
+    label: 'October',
+  },
+  {
+    id: 11,
+    label: 'November',
+  },
+  {
+    id: 12,
+    label: 'December',
   },
 ]
 
@@ -314,6 +365,17 @@ export default function Create() {
   // ===========================================================
   // ===========================================================
   // ===========================================================
+
+  const [monthState, setMonthState] = useState<{
+    wet: number[]
+    intermediate: number[]
+    dry: number[]
+  }>({
+    wet: [],
+    intermediate: [],
+    dry: [],
+  })
+
   // ===========================================================
 
   const [markdown, setMarkdown] = useState<File | undefined>(undefined)
@@ -657,28 +719,70 @@ export default function Create() {
                     name='factors.zones'
                     render={({ field }) => {
                       return (
-                        <FormItem
-                          key={item.id}
-                          className='flex flex-row items-start space-x-3 space-y-0'
-                        >
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value?.includes(item.id)}
-                              onCheckedChange={(checked) => {
-                                return checked
-                                  ? field.onChange([...field.value, item.id])
-                                  : field.onChange(
-                                      field.value?.filter(
-                                        (value) => value !== item.id,
-                                      ),
-                                    )
-                              }}
-                            />
-                          </FormControl>
-                          <FormLabel className='text-sm font-normal'>
-                            {item.label}
-                          </FormLabel>
-                        </FormItem>
+                        <div className='flex-col'>
+                          <FormItem
+                            key={item.id}
+                            className='flex flex-row items-start space-x-3 space-y-0 pb-2'
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(item.id)}
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? field.onChange([...field.value, item.id])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          (value) => value !== item.id,
+                                        ),
+                                      )
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className='text-sm font-normal'>
+                              {item.label}
+                            </FormLabel>
+                          </FormItem>
+                          <div className='grid grid-cols-3 gap-4 px-10'>
+                            {monthsList.map((month) => (
+                              <div>
+                                <Checkbox
+                                  value={month.id}
+                                  checked={monthState[
+                                    item.id as keyof typeof monthState
+                                  ].includes(month.id)}
+                                  onCheckedChange={(checked) => {
+                                    const mlist =
+                                      monthState[
+                                        item.id as keyof typeof monthState
+                                      ]
+                                    if (checked) {
+                                      setMonthState({
+                                        ...monthState,
+                                        [item.id as keyof typeof monthState]: [
+                                          ...mlist,
+                                          month.id,
+                                        ].sort(),
+                                      })
+                                    }
+                                    // Case 2  : The user unchecks the box
+                                    else {
+                                      setMonthState({
+                                        ...monthState,
+                                        [item.id as keyof typeof monthState]:
+                                          mlist
+                                            .filter((e) => e !== month.id)
+                                            .sort(),
+                                      })
+                                    }
+                                  }}
+                                />
+                                <FormLabel className='pl-4 text-sm font-normal'>
+                                  {month.label}
+                                </FormLabel>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       )
                     }}
                   />
