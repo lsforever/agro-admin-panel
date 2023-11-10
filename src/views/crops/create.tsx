@@ -316,10 +316,10 @@ export default function Create() {
         title: 'Crop Created',
         description: 'Crop creation successfull...',
       })
-      form.reset()
+      //form.reset()
       //form.setValue('category', query.data?.data.data[0]._id)
     },
-    onError: ({ error }) => {
+    onError: (error: Error) => {
       toast({
         title: 'Error',
         description: 'Crop creation failed. Please retry... ' + error.message,
@@ -401,8 +401,21 @@ export default function Create() {
   async function transformData(data: CropFormValues) {
     const newData = {
       ...data,
+      factors: {
+        ...data.factors,
+        zones: data.factors?.zones.map((zone) => ({
+          zone,
+          months: monthState[zone as keyof typeof monthState],
+        })),
+      },
       varieties: data.varieties.map((v) => v.value),
     }
+
+    // if (newData.factors) {
+    //   newData.factors.zones = newData.factors?.zones.map((zone) => {
+    //     zone: zone
+    //   })
+    // }
 
     const newFormData = new FormData()
     newFormData.append('data', JSON.stringify(newData))
@@ -422,11 +435,14 @@ export default function Create() {
   async function onSubmit(data: CropFormValues) {
     if (!blob) return
     const finalData = await transformData(data)
+
     mutation.mutate(finalData)
+
     toast({
       title: 'Creating a crop',
       description: 'Please wait. Crop will be created soon',
     })
+
     // toast({
     //   title: 'You submitted the following values:',
     //   description: (
@@ -744,7 +760,7 @@ export default function Create() {
                           </FormItem>
                           <div className='grid grid-cols-3 gap-4 px-10'>
                             {monthsList.map((month) => (
-                              <div>
+                              <div key={month.id}>
                                 <Checkbox
                                   value={month.id}
                                   checked={monthState[
