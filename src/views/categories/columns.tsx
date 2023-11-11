@@ -11,6 +11,7 @@ import { ActionsList } from './actions-list'
 export type Category = {
   _id: string
   name: string
+  image: string
 }
 
 export const columns: ColumnDef<Category>[] = [

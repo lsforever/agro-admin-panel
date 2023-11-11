@@ -34,6 +34,8 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 
+import { API_IMAGE_BASE_URL } from '@/lib/config'
+
 export const ActionsList = ({ category }: { category: Category }) => {
   const authHeader = useAuthHeader()
   const header = authHeader()
@@ -134,6 +136,17 @@ export const ActionsList = ({ category }: { category: Category }) => {
               <div className='p-2 text-sm text-muted-foreground'>
                 {category.name}
               </div>
+            </div>
+          </div>
+
+          <div>
+            <div className='text-sm'>Crop Image</div>
+            <div className='mt-1 p-4'>
+              <img
+                className='rounded-lg border'
+                src={`${API_IMAGE_BASE_URL}${category.image}`}
+                alt='crop image'
+              />
             </div>
           </div>
 
