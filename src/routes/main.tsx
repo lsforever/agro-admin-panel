@@ -14,6 +14,8 @@ import Dashboard from '@/views/dashboard'
 import Loading from '@/components/custom/loading'
 import UsersView from '@/views/users'
 
+import AnalyticsPage from '@/views/analytics'
+
 const Main = () => {
   return (
     <Routes>
@@ -35,7 +37,7 @@ const Main = () => {
       >
         <Route path='' element={<Dashboard />} />
 
-        <Route path='analytics' element={<h1>Analytics</h1>} />
+        <Route path='analytics' element={<AnalyticsPage />} />
 
         <Route path='crops' element={<CropPage />} />
         <Route path='crops/edit' element={<CropEdit />} />

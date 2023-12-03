@@ -68,7 +68,7 @@ export const columns: ColumnDef<User>[] = [
           variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Name
+          Email
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       )
@@ -86,7 +86,7 @@ export const columns: ColumnDef<User>[] = [
           variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Name
+          Role
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       )
