@@ -1,7 +1,79 @@
-export default function Users() {
+import { columns } from './columns'
+import { DataTable } from './data-table'
+
+//import { useSearchParams } from 'react-router-dom'
+import axios from 'axios'
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+
+import Loading from '@/components/custom/loading'
+import { useAuthHeader } from 'react-auth-kit'
+
+export default function UserPage() {
+  //let [searchParams, setSearchParams] = useSearchParams()
+
+  const authHeader = useAuthHeader()
+  const header = authHeader()
+
+  const [query, setQuery] = useState({
+    filter: {},
+    options: {
+      page: 1,
+      limit: 10,
+    },
+  })
+
+  const { isLoading, isError, error, data, isFetching } = useQuery({
+    queryKey: ['users', query],
+    queryFn: async () => {
+      const data = await axios.get('users', {
+        params: query,
+        // headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: header },
+      })
+      return data
+    },
+    keepPreviousData: true,
+    staleTime: Infinity,
+  })
+
+  if (isLoading) return <Loading />
+  if (isFetching) return <div>fetching</div>
+  if (isError) return 'An error has occurred: ' + error
+
+  //TODO add prefetch for next page
+  const users = data?.data.data
   return (
-    <div className='flex'>
-      <div className='p-2'>Users</div>
+    <div className='container mx-auto py-0'>
+      {/* {JSON.stringify(data?.data.data.docs, null, 4)} */}
+
+      {/* <DataTable columns={columns} data={data} /> */}
+      <DataTable
+        columns={columns}
+        data={users.docs}
+        totalCount={users.totalDocs}
+        pageSize={users.limit}
+        currentPage={users.page}
+        onPageChange={(page) => {
+          setQuery({
+            filter: {},
+            options: {
+              page: page,
+              limit: query.options.limit,
+            },
+          })
+        }}
+        onLimitChange={(limit) => {
+          setQuery({
+            filter: {},
+            options: {
+              page: 1,
+              limit: limit,
+            },
+          })
+        }}
+      />
+      {/* <DataTablePagination /> */}
     </div>
   )
 }
