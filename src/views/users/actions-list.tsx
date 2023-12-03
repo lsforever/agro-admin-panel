@@ -34,8 +34,6 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 
-import { API_IMAGE_BASE_URL } from '@/lib/config'
-
 export const ActionsList = ({ user }: { user: User }) => {
   const authHeader = useAuthHeader()
   const header = authHeader()
