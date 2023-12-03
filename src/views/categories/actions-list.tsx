@@ -52,7 +52,7 @@ export const ActionsList = ({ category }: { category: Category }) => {
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ['categories'] })
-
+      queryClient.invalidateQueries({ queryKey: ['crops'] })
       toast({
         title: 'Success',
         description: (
