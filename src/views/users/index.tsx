@@ -38,7 +38,7 @@ export default function UserPage() {
   })
 
   if (isLoading) return <Loading />
-  if (isFetching) return <div>fetching</div>
+  if (isFetching) return <Loading fetching={true} />
   if (isError) return 'An error has occurred: ' + error
 
   //TODO add prefetch for next page

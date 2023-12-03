@@ -42,7 +42,7 @@ const AnalyticsPage = () => {
   })
 
   if (isLoading || serverCheck.isLoading) return <Loading />
-  if (isFetching || serverCheck.isFetching) return <Loading />
+  if (isFetching || serverCheck.isFetching) return <Loading fetching={true} />
   if (isError || serverCheck.isError) return 'An error has occurred ...'
 
   const db = data.data.data.db
