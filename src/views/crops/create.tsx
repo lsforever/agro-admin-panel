@@ -125,8 +125,8 @@ const cropFormSchema = z.object({
     .min(2, {
       message: 'Name must be at least 2 characters.',
     })
-    .max(30, {
-      message: 'Name must not be longer than 30 characters.',
+    .max(50, {
+      message: 'Name must not be longer than 50 characters.',
     }),
   category: z.string().length(24, {
     message: 'Category must be an ID.',
@@ -137,8 +137,8 @@ const cropFormSchema = z.object({
     .min(2, {
       message: 'Botanical name must be at least 2 characters.',
     })
-    .max(30, {
-      message: 'Botanical name must not be longer than 30 characters.',
+    .max(50, {
+      message: 'Botanical name must not be longer than 50 characters.',
     }),
 
   varieties: z.array(
@@ -148,8 +148,8 @@ const cropFormSchema = z.object({
         .min(1, {
           message: 'Variety must be at least 1 characters.',
         })
-        .max(30, {
-          message: 'Variety must not be longer than 30 characters.',
+        .max(50, {
+          message: 'Variety must not be longer than 50 characters.',
         }),
     }),
   ),
@@ -208,8 +208,8 @@ const cropFormSchema = z.object({
               .min(2, {
                 message: 'Name must be at least 2 characters.',
               })
-              .max(30, {
-                message: 'Name must not be longer than 30 characters.',
+              .max(100, {
+                message: 'Name must not be longer than 100 characters.',
               }),
             value: z.string().url({ message: 'Please enter a valid URL.' }),
           }),
@@ -235,8 +235,8 @@ const cropFormSchema = z.object({
               .min(2, {
                 message: 'Name must be at least 2 characters.',
               })
-              .max(30, {
-                message: 'Name must not be longer than 30 characters.',
+              .max(100, {
+                message: 'Name must not be longer than 100 characters.',
               }),
             value: z.string().url({ message: 'Please enter a valid URL.' }),
           }),
