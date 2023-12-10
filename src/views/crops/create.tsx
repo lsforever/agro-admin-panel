@@ -34,6 +34,7 @@ import {
 } from '@/components/ui/select'
 import { useToast } from '@/components/ui/use-toast'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Switch } from '@/components/ui/switch'
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
@@ -47,6 +48,7 @@ import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import ImageCropperOnly from '@/components/custom/image-crop-only'
 import { Separator } from '@/components/ui/separator'
+import { Label } from '@/components/ui/label'
 
 const allowedFileTypes = 'image/png, image/jpeg, image/x-png'
 // const allowedFileTypesMarkdown = 'text/markdown'
@@ -191,6 +193,7 @@ const cropFormSchema = z.object({
           max: z.coerce.number().nonnegative().optional(),
         })
         .optional(),
+      long_term: z.boolean().optional(),
     })
     .optional(),
   other: z
@@ -686,6 +689,29 @@ export default function Create() {
               )}
             />
           </FormItem>
+
+          <FormField
+            control={form.control}
+            name={`factors.long_term`}
+            render={({ field }) => (
+              <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
+                <div className='space-y-0.5'>
+                  <FormLabel className='text-base'>Is Long Term Crop</FormLabel>
+                  <FormDescription>
+                    Check this if the crop is long term. Don't select this if
+                    the crop is short term
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
           <FormItem>
             <FormLabel>Crop Duration</FormLabel>
             <FormField
@@ -717,6 +743,7 @@ export default function Create() {
               )}
             />
           </FormItem>
+
           <FormField
             control={form.control}
             name='factors.zones'
