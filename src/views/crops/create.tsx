@@ -48,7 +48,6 @@ import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import ImageCropperOnly from '@/components/custom/image-crop-only'
 import { Separator } from '@/components/ui/separator'
-import { Label } from '@/components/ui/label'
 
 const allowedFileTypes = 'image/png, image/jpeg, image/x-png'
 // const allowedFileTypesMarkdown = 'text/markdown'
