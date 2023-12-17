@@ -30,7 +30,7 @@ export default function CropPage() {
         'crops',
 
         {
-          params: query,
+          params: { data: JSON.stringify(query) },
           // headers: { Authorization: `Bearer ${token}` },
           headers: { Authorization: header },
         },
